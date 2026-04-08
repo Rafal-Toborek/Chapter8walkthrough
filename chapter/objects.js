@@ -19,8 +19,24 @@ let pokerGame = {
    placeBet: function() {
    this.currentBank -= this.currentBet;
    return this.currentBank
-}}
-
+},
+   payBet: function(type) {
+      let pay = 0;
+      switch (type) {
+         case "Royal Flush": pay = 250; break;
+         case "Straight Flush": pay = 50; break;
+         case "Four of a Kind": pay = 25; break;
+         case "Full House": pay = 9; break;
+         case "Flush": pay = 6; break;
+         case "Straight": pay = 4; break;
+         case "Three of a Kind": pay = 3; break;
+         case "Two Pair": pay = 2; break;
+         case "Jacks or Better": pay = 1; break;
+}
+   this.currentBank += pay*this.currentBet;
+   return this.currentBank;
+   }
+};
 
 /* Constructor function for poker cards */
 function pokerCard(cardSuit, cardRank) {
@@ -49,12 +65,6 @@ function pokerDeck() {
       }
    }
 
-
-   /* Constructor function for poker hands */
-   function pokerHand(handLength) {
-      this.cards = new Array(handLength);
-   }
-
    // Method to randomly sort the cards in the deck
    this.shuffle = function() {
       this.cards.sort(function() {
@@ -65,13 +75,24 @@ function pokerDeck() {
    // Method to deal cards from the deck into a hand
    this.dealTo = function(pokerHand) {
       let cardsDealt = pokerHand.cards.length;
-      pokerHands.cards = this.cards.splice(0, cardsDealt);
+      pokerHand.cards = this.cards.splice(0, cardsDealt);
    } 
 };
 
+/* Constructor function for poker hands */
+function pokerHand(handLength) {
+   this.cards = new Array(handLength);
+}
 
+// Method to replace a card in a hand with a card from a deck
+pokerHand.prototype.replaceCard = function(cardIndex, pokerDeck) {
+   this.cards[cardIndex] = pokerDeck.cards.shift();
+}
 
-
+// Method to determine the value of the pokerHand
+pokerHand.prototype.getHandValue = function() {
+   return handType(this);
+}
 
 
 
